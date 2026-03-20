@@ -15,36 +15,34 @@ public class Ball : MonoBehaviour
     void Start()
     {
         rig = GetComponent<Rigidbody2D>();
-    }
-
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        
+        ballPos = transform.position;
+        rig.linearVelocity = new Vector2(0f, ballPos.y * directionY * ballSpeed);
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
 
+
         //TODO: ajouter les Tags sur les éléments du jeu
-        // utile de faire ça ici ? --> ballPos = transform.position;
+        ballPos = transform.position;
         if(collision.gameObject.CompareTag("Player"))
         {
             // rebond sur le player avec calcul d'angle selon la pos du player avec deltapos
             playerPos = collision.gameObject.transform.position;
-            ballPos = transform.position;
             float deltaPos = ballPos.x - playerPos.x;
             rig.linearVelocity = new Vector2(deltaPos * ballSpeed, directionY * ballSpeed).normalized * ballSpeed;
         }
         if(collision.gameObject.CompareTag("Wall"))
         {
             //TODO: rebonds sur les murs
+            rig.linearVelocity = new Vector2(-rig.linearVelocity.x * ballSpeed, rig.linearVelocity.y * ballSpeed).normalized * ballSpeed;
+
         }
         if(collision.gameObject.CompareTag("Brick"))
         {
             //TODO: rebonds sur les briques et destruction
-
-            Destroy(collision.gameObject);
+            rig.linearVelocity = new Vector2(rig.linearVelocity.x * ballSpeed, -rig.linearVelocity.y * ballSpeed).normalized * ballSpeed;
+            //Destroy(collision.gameObject);
         }
     }
 }
