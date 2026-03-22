@@ -1,6 +1,6 @@
 using System.IO.Compression;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using System.Collections;
 
 public class Ball : MonoBehaviour
 {
@@ -8,22 +8,29 @@ public class Ball : MonoBehaviour
     private int directionY = 1;
     private Vector2 playerPos;
     private Vector2 ballPos;
-
     private Rigidbody2D rig;
+    private bool canBounce = true;
+    private Vector2 currentDirection;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rig = GetComponent<Rigidbody2D>();
         ballPos = transform.position;
-        rig.linearVelocity = new Vector2(0f, ballPos.y * directionY * ballSpeed);
+        currentDirection = new Vector2(0f, 1f); // vers le haut
+        rig.linearVelocity = currentDirection * ballSpeed;
+    }
+
+    IEnumerator ResetBounce()
+    {
+        yield return new WaitForSeconds(0.1f);
+        canBounce = true;
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
 
-
-        //TODO: ajouter les Tags sur les éléments du jeu
+            //TODO: ajouter les Tags sur les éléments du jeu
         ballPos = transform.position;
         if(collision.gameObject.CompareTag("Player"))
         {
@@ -35,14 +42,15 @@ public class Ball : MonoBehaviour
         if(collision.gameObject.CompareTag("Wall"))
         {
             //TODO: rebonds sur les murs
-            rig.linearVelocity = new Vector2(-rig.linearVelocity.x * ballSpeed, rig.linearVelocity.y * ballSpeed).normalized * ballSpeed;
+            rig.linearVelocity = new Vector2(rig.linearVelocity.x * -1, rig.linearVelocity.y);
 
         }
         if(collision.gameObject.CompareTag("Brick"))
         {
             //TODO: rebonds sur les briques et destruction
-            rig.linearVelocity = new Vector2(rig.linearVelocity.x * ballSpeed, -rig.linearVelocity.y * ballSpeed).normalized * ballSpeed;
-            //Destroy(collision.gameObject);
+            currentDirection = new Vector2(currentDirection.x, currentDirection.y * -1);
+            rig.linearVelocity = currentDirection * ballSpeed;
+            Destroy(collision.gameObject);
         }
     }
 }
