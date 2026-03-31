@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Wall
   - Brick
+  - TopWall
+  - DeathZone
   layers:
   - Default
   - TransparentFX
