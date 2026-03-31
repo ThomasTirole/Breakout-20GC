@@ -119,6 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &52069633 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6201261904708095169, guid: 47d59ef37609d984e85a60f1b77429ae, type: 3}
+  m_PrefabInstance: {fileID: 565503834}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &405806646 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7217571353712342066, guid: 65e031dfdac79eb4f9368933ac0d57ca, type: 3}
@@ -137,6 +142,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Ball
   ballSpeed: 10
+  player: {fileID: 52069633}
 --- !u!1001 &412850806
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -484,7 +490,7 @@ GameObject:
   - component: {fileID: 665459032}
   m_Layer: 0
   m_Name: DeathZone
-  m_TagString: Untagged
+  m_TagString: DeathZone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
