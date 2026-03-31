@@ -23,7 +23,7 @@ public class Ball : MonoBehaviour
 
     IEnumerator ResetBounce()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.01f);
         canBounce = true;
     }
 
@@ -37,20 +37,30 @@ public class Ball : MonoBehaviour
             // rebond sur le player avec calcul d'angle selon la pos du player avec deltapos
             playerPos = collision.gameObject.transform.position;
             float deltaPos = ballPos.x - playerPos.x;
-            rig.linearVelocity = new Vector2(deltaPos * ballSpeed, directionY * ballSpeed).normalized * ballSpeed;
+            currentDirection = new Vector2(deltaPos * ballSpeed, directionY * ballSpeed).normalized;
+            rig.linearVelocity = currentDirection * ballSpeed;
         }
         if(collision.gameObject.CompareTag("Wall"))
         {
             //TODO: rebonds sur les murs
-            rig.linearVelocity = new Vector2(rig.linearVelocity.x * -1, rig.linearVelocity.y);
-
+            //rig.linearVelocity = new Vector2(rig.linearVelocity.x * -1, rig.linearVelocity.y);
+            currentDirection = new Vector2(currentDirection.x * -1, currentDirection.y);
+            rig.linearVelocity = currentDirection * ballSpeed;
         }
-        if(collision.gameObject.CompareTag("Brick"))
+        if(collision.gameObject.CompareTag("TopWall"))
         {
             //TODO: rebonds sur les briques et destruction
             currentDirection = new Vector2(currentDirection.x, currentDirection.y * -1);
             rig.linearVelocity = currentDirection * ballSpeed;
+        }
+        if(collision.gameObject.CompareTag("Brick") && canBounce)
+        {
+            canBounce = false;
+            //TODO: rebonds sur les briques et destruction
+            currentDirection = new Vector2(currentDirection.x, currentDirection.y * -1);
+            rig.linearVelocity = currentDirection * ballSpeed;
             Destroy(collision.gameObject);
+            StartCoroutine(ResetBounce());
         }
     }
 }
